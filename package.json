@@ -1,0 +1,32 @@
+{
+  "name": "h5",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "nuxt",
+    "build": "nuxt build",
+    "start": "nuxt start",
+    "generate": "nuxt generate"
+  },
+  "dependencies": {
+    "@nuxtjs/axios": "^5.13.6",
+    "amfe-flexible": "^2.2.1",
+    "core-js": "^3.19.3",
+    "echarts": "^5.2.2",
+    "install": "^0.13.0",
+    "npm": "^8.3.0",
+    "nuxt": "^2.15.8",
+    "postcss-pxtorem": "^5.1.1",
+    "vant": "^2.12.36",
+    "vue": "^2.6.14",
+    "vue-server-renderer": "^2.6.14",
+    "vue-template-compiler": "^2.6.14",
+    "webpack": "^4.46.0"
+  },
+  "devDependencies": {
+    "@nuxt/types": "^2.15.8",
+    "@nuxt/typescript-build": "^2.1.0",
+    "less": "^3.9.0",
+    "less-loader": "^4.1.0"
+  }
+}
