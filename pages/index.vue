@@ -1,6 +1,7 @@
 <template>
-<!--    <div class="test"/>-->
- <div class="container">
+  <div>
+    <van-button size="mini" @click='getPdf("服务报告")' style="position: absolute;right: 10px;top: 10px">下载服务报告</van-button>
+ <div id="container">
    <div class="head">
      <img class="head-img" src="../static/logo.png" alt=""/>
        <span class="head-title">服务报告</span>
@@ -55,7 +56,7 @@
      <Card :data='data.workOrderTotalData'/>
      <EchartsServer :workOrderTimeLatitudeTotalData='data.workOrderTimeLatitudeTotalData'/>
 
-            <div 
+            <div
        class='img-list'>
        <van-image
         v-for="(item,index) in data.userStoreReportImgUrls"
@@ -69,17 +70,17 @@
 
        <span class='title'>我们为您解决了以下问题</span>
 
-        
+
 
 
        <van-cell :title="item"  is-link   v-for="(item,index) in data.userStoreReportFaultDesc" :key="index"/>
-    
 
-       <div class='btn'>
-        <van-button size='mini' icon='arrow' round icon-position='right'>
-         更多
-       </van-button>
-       </div>
+
+<!--       <div class='btn'>-->
+<!--        <van-button size='mini' icon='arrow' round icon-position='right'>-->
+<!--         更多-->
+<!--       </van-button>-->
+<!--       </div>-->
 
    </div>
 
@@ -106,7 +107,7 @@
   <div class='link'>
       <a href="">我们将持续为您</a>
     <a href="">提供优质的服务</a>
-      <a href="">最后感想您的理解与支持</a> 
+      <a href="">最后感想您的理解与支持</a>
   </div>
 
    </div>
@@ -127,11 +128,12 @@
      </div>
     </div>
   </div>
-  
+
 </div>
 
 
  </div>
+  </div>
 </template>
 
 <script>
@@ -158,6 +160,7 @@ export default {
    async mounted() {
     // const {data} = await api()
     // console.log(data)
+     this.getPdf("服务报告")
   },
   methods:{
     preview(item) {
@@ -168,12 +171,12 @@ export default {
 </script>
 
 <style lang="less">
-  .container{
+  #container{
     display: flex;
     flex-flow: column nowrap;
     justify-content: center;
     align-items: center;
-    margin: 45px 18px;
+    padding: 45px 18px;
     .head{
       display: flex;
       flex-flow: row nowrap;
@@ -225,10 +228,10 @@ export default {
         font-size: 14px;
         font-family: Source Han Sans CN;
         font-weight: 400;
-        line-height: 33px;
+        line-height: 20px;
         color: #333333;
         opacity: 1;
-       
+
       }
       .storeInfo-time{
         text-align: center;
@@ -309,7 +312,6 @@ export default {
 
       }
       .span-blue-text{
-        width: 284px;
         height: 32px;
         font-size: 14px;
         font-family: Source Han Sans CN;
@@ -322,6 +324,7 @@ export default {
         width:100%;
       }
       .span-black-text{
+        width: 300px;
         height: 46px;
         font-size: 16px;
         font-family: Source Han Sans CN;
@@ -367,7 +370,7 @@ export default {
 
         }
         .foot-right{
-  
+
           display:flex;
           flex-flow:column nowrap;
           justify-content:space-around;
@@ -400,7 +403,7 @@ export default {
           }
         }
         }
-   
+
     }
   }
 </style>
