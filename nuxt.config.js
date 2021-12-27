@@ -58,7 +58,7 @@ export default {
         //   propList: ['*']
         // },
         "postcss-pxtorem": {
-          rootValue: 37.5, //这里是关键
+          rootValue:37.5, //这里是关键
           unitPrecision: 5,
           propList: ['*'],
           selectorBlackList: ['as-px'],

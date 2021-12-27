@@ -10,6 +10,8 @@
     data () {
       return {
         myChartx: null,
+        xAxisData:[],
+        yAxisData:[]
       }
     },
     methods: {
@@ -30,7 +32,7 @@
         this.myChartx.setOption({
           color:['#FA4901'],
           title: {
-            text: '数量(桶)',
+            text: '次数',
             textStyle: {
               //调用fontSize（）方法，此时fontSize为18px
               fontSize: fontSize(0.12)
@@ -42,13 +44,13 @@
           },
           tooltip: {},
           xAxis: {
-            data: ['衬衫',  '裤子', '高跟鞋', '袜子']
+            data: this.xAxisData
           },
           yAxis: {},
           series: [{
-            name: '销量',
+            name: '次数',
             type: 'bar',
-            data: [5, 20, 36, 10],
+            data: this.yAxisData,
             barWidth: fontSize(0.5)
           }]
         })
@@ -56,7 +58,19 @@
 
       },
     },
+     props:{
+      workOrderTimeLatitudeTotalData:{
+        type:Array
+      }
+    },
+    
     mounted () {
+         this.xAxisData= this.workOrderTimeLatitudeTotalData.map(item=>{
+        return item.timeAxis
+      })
+         this.yAxisData= this.workOrderTimeLatitudeTotalData.map(item=>{
+        return item.num
+      })
       this.echartsInit()
       window.addEventListener('resize', () => {
         this.myChartx.resize()
@@ -69,7 +83,7 @@
 <style scoped lang="less">
   #myChartx{
     width: 100%;
-    height: 625px;
+    height: 312px;
     /*margin-left: auto;*/
     /*margin-right: auto;*/
     /*float: left;*/

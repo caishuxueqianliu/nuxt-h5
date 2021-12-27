@@ -18,27 +18,27 @@
 
 <style lang="less" scoped>
 .cell{
-  width:678px;
-  height: 40px;
+  width:339px;
+  height: 20px;
   display: flex;
   flex-flow: row nowrap;
   justify-content: flex-start;
   align-items: center;
-  margin-bottom: 36px;
+  margin-bottom: 18px;
   .left{
-    width: 4px;
-    height: 24px;
+    width: 2px;
+    height: 12px;
     background: #1087E8;
     opacity: 1;
-    border-radius: 2px;
-    margin-right: 12px;
+    border-radius: 1px;
+    margin-right: 6px;
   }
   .right{
-    height: 32px;
-    font-size: 32px;
+    height: 16px;
+    font-size: 16px;
     font-family: Source Han Sans CN;
     font-weight: bold;
-    line-height: 32px;
+    line-height: 16px;
     color: #333333;
     opacity: 1;
   }
