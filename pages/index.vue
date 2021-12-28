@@ -1,15 +1,18 @@
 <template>
-  <div >
-    <img alt=""  id='exportImg' src="" >
-<!--    <a  href="" hidden id="exportImgLink"></a>-->
-<!--    <van-button hidden :disabled="pdfDisabled" @click='getPdfDownLoad("服务报告")' class="btn" size="mini"-->
-<!--                style="z-index:999;position: fixed;top: 10px" type="primary">-->
-<!--      下载PDF-->
-<!--    </van-button>-->
-<!--    <van-button  :disabled="imgDisabled" @click='getImgDownLoad("服务报告")' size="mini"-->
-<!--                style="z-index:999;position: fixed;right: 10px;top: 10px" type="primary">-->
-<!--      下载图片-->
-<!--    </van-button>-->
+  <div>
+    <van-notice-bar background="#ecf9ff" color="#1989fa" left-icon="info-o">
+      长按下图保存图片
+    </van-notice-bar>
+    <img alt="" id='exportImg' src="">
+    <!--    <a  href="" hidden id="exportImgLink"></a>-->
+    <!--    <van-button hidden :disabled="pdfDisabled" @click='getPdfDownLoad("服务报告")' class="btn" size="mini"-->
+    <!--                style="z-index:999;position: fixed;top: 10px" type="primary">-->
+    <!--      下载PDF-->
+    <!--    </van-button>-->
+    <!--    <van-button    @click='clickGeneratePicture()' size="mini"-->
+    <!--                style="z-index:999;position: fixed;right: 10px;top: 10px" type="primary">-->
+    <!--      下载图片-->
+    <!--    </van-button>-->
     <div id="container" v-show="!show">
       <div class="head">
         <img class="head-img" src="../static/logo.png" alt=""/>
@@ -17,7 +20,7 @@
       </div>
 
       <div class="storeInfo">
-        <img class="storeInfo-img" src="../static/test.png" alt=""/>
+        <img :src="data.userStore.image" alt="" class="storeInfo-img"/>
         <span class="storeInfo-name">{{data.userStore.name}}</span>
         <span class="storeInfo-address">{{data.userStore.address}}</span>
         <span class="storeInfo-time">{{startDate}} 至 {{endDate}}</span>
@@ -144,7 +147,11 @@ export default {
   name: 'IndexPage',
   data() {
     return {
-      timer:null,
+      startDate: '',
+      endDate: '',
+      data: {},
+      error: false,
+      timer: null,
       show: false,
       imgDisabled: false,
       pdfDisabled: false,
@@ -153,25 +160,50 @@ export default {
   },
 
   async asyncData({$axios, query}) {
-    // const {data} = await $axios.post('http://192.168.0.238:7080/sale/api/store/reportForm', query)
-    // const obj = data.data
-    // return {data: obj}
-    const {startDate = '2021-01-01', endDate = '2021-12-31'} = query
-    const {data} = await api()
-    return {data, startDate, endDate}
+    try {
+      const {data} = await $axios.post('http://www.glaya.site:7080/sale/api/store/reportForm', query)
+      const obj = data.data
+      const {startDate = '2021-01-01', endDate = '2021-12-31'} = query
+      return {data: obj, startDate, endDate}
+    } catch (e) {
+      Toast.fail('请求数据失败');
+      this.error = true
+    }
+
 
   },
-  async mounted() {
-    Toast.loading({
-      duration:0,
-      message: '正在生成图片中...',
-      forbidClick: true,
-    });
-   this.timer =  setTimeout( ()=>{
-      this.getImgDownLoad("服务报告")
-    },1000)
+  mounted() {
+    window.onload = this.generateImg()
   },
   methods: {
+    clickGeneratePicture() {
+      // html2canvas(document.querySelector("#capture")).then(canvas => {
+      //   // 转成图片，生成图片地址
+      //   this.imgUrl = canvas.toDataURL("image/png");
+      this.saveFile(document.querySelector('#exportImg').src, new Date().toLocaleString())
+      //   console.log(this.imgUrl);
+      //   this.firstFlag = false;
+      // })
+    },
+    saveFile(data, filename) {
+      const save_link = document.createElementNS('http://www.w3.org/1999/xhtml', 'a');
+      save_link.href = data;
+      save_link.download = filename;
+
+      const event = document.createEvent('MouseEvents');
+      event.initMouseEvent('click', true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
+      save_link.dispatchEvent(event);
+    },
+    generateImg() {
+      Toast.loading({
+        duration: 0,
+        message: '正在生成图片中...',
+        forbidClick: true,
+      });
+      this.timer = setTimeout(() => {
+        this.getImgDownLoad("服务报告")
+      }, 1000)
+    },
     preview(item) {
       ImagePreview([item]);
     },
