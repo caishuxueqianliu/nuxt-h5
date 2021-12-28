@@ -1,16 +1,16 @@
 <template>
-  <div>
-    <img alt="" hidden id='exportImg' src="">
-    <a hidden href="" id="exportImgLink"></a>
-    <van-button :disabled="pdfDisabled" @click='getPdfDownLoad("服务报告")' class="btn" size="mini"
-                style="z-index:999;position: fixed;top: 10px" type="primary">
-      下载PDF
-    </van-button>
-    <van-button :disabled="imgDisabled" @click='getImgDownLoad("服务报告")' size="mini"
-                style="z-index:999;position: fixed;right: 10px;top: 10px" type="primary">
-      下载图片
-    </van-button>
-    <div id="container">
+  <div >
+    <img alt=""  id='exportImg' src="" >
+<!--    <a  href="" hidden id="exportImgLink"></a>-->
+<!--    <van-button hidden :disabled="pdfDisabled" @click='getPdfDownLoad("服务报告")' class="btn" size="mini"-->
+<!--                style="z-index:999;position: fixed;top: 10px" type="primary">-->
+<!--      下载PDF-->
+<!--    </van-button>-->
+<!--    <van-button  :disabled="imgDisabled" @click='getImgDownLoad("服务报告")' size="mini"-->
+<!--                style="z-index:999;position: fixed;right: 10px;top: 10px" type="primary">-->
+<!--      下载图片-->
+<!--    </van-button>-->
+    <div id="container" v-show="!show">
       <div class="head">
         <img class="head-img" src="../static/logo.png" alt=""/>
         <span class="head-title">服务报告</span>
@@ -144,6 +144,8 @@ export default {
   name: 'IndexPage',
   data() {
     return {
+      timer:null,
+      show: false,
       imgDisabled: false,
       pdfDisabled: false,
       activeNames: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
@@ -160,7 +162,14 @@ export default {
 
   },
   async mounted() {
-
+    Toast.loading({
+      duration:0,
+      message: '正在生成图片中...',
+      forbidClick: true,
+    });
+   this.timer =  setTimeout( ()=>{
+      this.getImgDownLoad("服务报告")
+    },1000)
   },
   methods: {
     preview(item) {
@@ -170,7 +179,13 @@ export default {
       this.imgDisabled = true
       this.getImg(title).then(() => {
         this.imgDisabled = false
+        Toast.clear();
+        clearInterval(this.timer);
+        this.show = true
+
       }).catch(() => {
+        Toast.clear();
+        clearInterval(this.timer);
         Toast.fail('下载图片失败');
         this.pdfDisabled = false
       })
@@ -191,6 +206,9 @@ export default {
 <style lang="less">
   .btn {
     right: 70px;
+  }
+  #exportImg{
+    width:100%;
   }
 
   #container {
