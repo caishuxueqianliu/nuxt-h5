@@ -2,10 +2,12 @@
   <div>
     <img alt="" hidden id='exportImg' src="">
     <a hidden href="" id="exportImgLink"></a>
-    <van-button @click='getPdf("服务报告")' size="mini" style="position: absolute;right: 70px;top: 10px" type="primary">
+    <van-button :disabled="pdfDisabled" @click='getPdfDownLoad("服务报告")' size="mini"
+                style="position: absolute;right: 70px;top: 10px" type="primary">
       下载PDF
     </van-button>
-    <van-button @click='getImg("服务报告")' size="mini" style="position: absolute;right: 10px;top: 10px" type="primary">
+    <van-button :disabled="imgDisabled" @click='getImgDownLoad("服务报告")' size="mini"
+                style="position: absolute;right: 10px;top: 10px" type="primary">
       下载图片
     </van-button>
     <div id="container">
@@ -58,15 +60,16 @@
                 :key="index"
                 width="70"
                 height="70"
-                :src="item.slice(0,-1)"
-                @click='preview(item.slice(0,-1))'/>
+                :src="item.replace(';','')"
+                @click="preview(item.replace(';',''))"/>
 
        </div>
 
        <span class='title'>我们为您解决了以下问题</span>
 
 
-     <van-cell :key="index" :title="item.faultDesc" is-link v-for="(item,index) in data.userStoreReportFaultDesc"/>
+     <van-cell :key="index" :title="item.faultDesc || item" is-link
+               v-for="(item,index) in data.userStoreReportFaultDesc"/>
 
 
 <!--       <div class='btn'>-->
@@ -136,14 +139,18 @@ export default {
   name: 'IndexPage',
   data() {
     return {
+      imgDisabled: false,
+      pdfDisabled: false,
       activeNames: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
     }
   },
 
   async asyncData({$axios, query}) {
-    const {data} = await $axios.post('http://192.168.0.238:7080/sale/api/store/reportForm', query)
-    const obj = data.data
-    return {data: obj}
+    // const {data} = await $axios.post('http://192.168.0.238:7080/sale/api/store/reportForm', query)
+    // const obj = data.data
+    // return {data: obj}
+    const {data} = await api()
+    return {data}
 
   },
   async mounted() {
@@ -152,6 +159,18 @@ export default {
   methods: {
     preview(item) {
       ImagePreview([item]);
+    },
+    getImgDownLoad(title) {
+      this.imgDisabled = true
+      this.getImg(title).then(() => {
+        this.imgDisabled = false
+      })
+    },
+    getPdfDownLoad(title) {
+      this.pdfDisabled = true
+      this.getPdf(title).then(() => {
+        this.pdfDisabled = false
+      })
     }
   }
 }
