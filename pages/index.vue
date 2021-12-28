@@ -52,7 +52,7 @@
 
    <div class="content">
      <TitleCell title="服务数据统计"/>
-     <span class="content-title">我们的维修师傅为您提供了12次上门服务</span>
+     <span class="content-title">我们的维修师傅为您提供了次上门服务</span>
      <Card :data='data.workOrderTotalData'/>
      <EchartsServer :workOrderTimeLatitudeTotalData='data.workOrderTimeLatitudeTotalData'/>
 
@@ -66,7 +66,7 @@
        <!--                :src="item.replace(';','')"-->
        <!--                @click="preview(item.replace(';',''))"/>-->
        <img
-         v-for="(item,index) in data.userStoreReportImgUrls"
+         v-for="(item,index) in data.userStoreReportImgUrls.slice(0,4)"
          :key="index"
          :src="item.replace(';','')"
          @click="preview(item.replace(';',''))"/>
@@ -76,7 +76,7 @@
        <span class='title'>我们为您解决了以下问题</span>
 
 
-     <van-cell :key="index" :title="item.faultDesc || item" is-link
+     <van-cell :key="index" :title="item.faultDesc || item"
                v-for="(item,index) in data.userStoreReportFaultDesc"/>
 
 
@@ -91,26 +91,27 @@
    <div class="content">
      <p class='span-blue-title'>根据数据统计</p>
      <p class='span-blue-text'>平均10分钟之内师傅接单，20分钟联系客户，
-大部分维修单，3小时之内上门解决</p>
-      <p class='span-blue-text'>您选择的这款洗碗机
-共有120家品牌餐饮店在使用如下案例：</p>
+       大部分维修单，3小时之内上门解决</p>
+     <p class='span-blue-text'>您选择的这款洗碗机
+       共有120家品牌餐饮店在使用如下案例：</p>
 
-   <img class='cooperation'
-        src='../static/cooperation.png'
-   ></img>
-   <p class='span-black-text'>
-一定是特别的缘分，您的客户经理，
-2021-10-20第一次相识，共拜访您 <b>54</b>次
-  </p>
+     <img class='cooperation'
+          src='../static/cooperation.png'
+     ></img>
+     <p class='span-black-text'>
+       一定是特别的缘分，您的客户经理，
+     </p>
+     <p class='span-black-text'><b>{{data.firstTime}}</b>第一次相识，共拜访您 <b>{{data.visitCounts}}</b>次
+     </p>
 
-  <p class='span-black-text'>
-    这是您在小格厨房的 第 <b>22</b>天
-  </p>
+     <p class='span-black-text'>
+       这是您在小格厨房的 第 <b>{{data.alreadyExistsDays}}</b>天
+     </p>
 
 
-  <div class='link'>
-      <a href="">我们将持续为您</a>
-    <a href="">提供优质的服务</a>
+     <div class='link'>
+       <a href="">我们将持续为您</a>
+       <a href="">提供优质的服务</a>
       <a href="">最后感想您的理解与支持</a>
   </div>
 
@@ -405,18 +406,20 @@ export default {
       .cooperation{
         width:100%;
       }
-      .span-black-text{
-        width: 300px;
-        height: 46px;
+      .span-black-text {
+        margin: 0;
+        padding: 0;
+        height: 16px;
         font-size: 16px;
         font-family: Source Han Sans CN;
         font-weight: 400;
-        line-height: 29px;
+        /*line-height: 29px;*/
         color: #333333;
         opacity: 1;
-        margin-bottom:10px;
-        b{
-          font-size:20px;
+        margin-bottom: 10px;
+
+        b {
+          font-size: 20px;
         }
       }
       .link{

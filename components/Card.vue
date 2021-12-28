@@ -1,25 +1,27 @@
 <template>
     <div class="card">
-    <div class="card-item" v-for='item in data' :key='item.dispatchType'>
-      <span class="card-item-title">{{item.dispatchTypeStr || (item.productName.slice(-3) ) }}</span>
-      <div> <span class="card-item-num">{{item.num}}</span><span class="card-item-title">
-
-      {{item.productName ? '桶' : '次'}}</span> </div>
-    </div>
+      <div :key='item.dispatchType' class="card-item" v-for='item in dd'>
+        <span class="card-item-title">{{item.dispatchTypeStr || (item.productName.slice(-3) )}}</span>
+        <div><span class="card-item-num">{{item.num}}</span><span class="card-item-title">
+      {{item.productName ? '桶' : '次'}}</span></div>
+      </div>
     </div>
 </template>
 
 <script>
     export default {
-        name: "Card",
-        props:{
-          data:{
-            type: Array
-          }
-        },
-        methods:{
-
+      name: "Card",
+      props: {
+        data: {
+          type: Array
         }
+      },
+      computed: {
+        dd() {
+          return this.data
+        }
+      },
+      methods: {}
     }
 </script>
 

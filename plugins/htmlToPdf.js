@@ -9,7 +9,8 @@ export default {
         try {
           html2Canvas(document.querySelector('#container'), {
             useCORS: true,
-             // backgroundColor: null,
+            // backgroundColor: null
+            // backgroundColor: null
             scale: 2
           }).then((canvas) => {
             const exportImgEle = document.querySelector('#exportImg');
