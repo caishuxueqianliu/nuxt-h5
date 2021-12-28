@@ -96,9 +96,6 @@
   #myChart{
     width: 100%;
     height: 312px;
-    /*margin-left: auto;*/
-    /*margin-right: auto;*/
-    /*float: left;*/
   }
 
 </style>

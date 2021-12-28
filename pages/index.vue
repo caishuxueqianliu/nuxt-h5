@@ -1,16 +1,23 @@
 <template>
   <div>
-    <van-button size="mini" @click='getPdf("服务报告")' style="position: absolute;right: 10px;top: 10px">下载服务报告</van-button>
- <div id="container">
-   <div class="head">
-     <img class="head-img" src="../static/logo.png" alt=""/>
-       <span class="head-title">服务报告</span>
-   </div>
+    <img alt="" hidden id='exportImg' src="">
+    <a hidden href="" id="exportImgLink"></a>
+    <van-button @click='getPdf("服务报告")' size="mini" style="position: absolute;right: 70px;top: 10px" type="primary">
+      下载PDF
+    </van-button>
+    <van-button @click='getImg("服务报告")' size="mini" style="position: absolute;right: 10px;top: 10px" type="primary">
+      下载图片
+    </van-button>
+    <div id="container">
+      <div class="head">
+        <img class="head-img" src="../static/logo.png" alt=""/>
+        <span class="head-title">服务报告</span>
+      </div>
 
-   <div class="storeInfo">
-     <img class="storeInfo-img" src="../static/test.png" alt=""/>
-     <span class="storeInfo-name">{{data.userStore.name}}</span>
-     <span class="storeInfo-address">{{data.userStore.address}}</span>
+      <div class="storeInfo">
+        <img class="storeInfo-img" src="../static/test.png" alt=""/>
+        <span class="storeInfo-name">{{data.userStore.name}}</span>
+        <span class="storeInfo-address">{{data.userStore.address}}</span>
      <span class="storeInfo-time">2021-06 至 2021-07</span>
    </div>
 
@@ -25,26 +32,14 @@
    <div class="content">
      <TitleCell title="耗材详细数据"/>
      <span class="content-title">在选择的这些时间里。您总共领取了</span>
-     <van-collapse v-model="activeNames"   title-class="collapse-title">
-         <van-collapse-item :title="item.timeAxis" name="1" class="collapse-item"
-          v-for='item in data.lotionTimeLatitudeData' :key="item.timeAxis">
+     <van-collapse v-model="activeNames" title-class="collapse-title">
+       <van-collapse-item :key="item.timeAxis" :name="item.index" :title="item.timeAxis"
+                          class="collapse-item" v-for='(item,index) in data.lotionTimeLatitudeData'>
            <span v-for='item1 in item.childLotionReportDetail' :key='item1.productName'>
            {{item1.productName.slice(-3)}} x{{item1.num}}
          </span>
-   <!--         <span>洗洁剂：12桶</span>
-           <span>洗洁剂：12桶</span> -->
-         </van-collapse-item>
-    <!--      <van-collapse-item title="10月份" name="2">
-           <span>洗洁剂：12桶</span>
-           <span>洗洁剂：12桶</span>
-           <span>洗洁剂：12桶</span>
-         </van-collapse-item>
-         <van-collapse-item title="11月份" name="3" >
-           <span>洗洁剂：12桶</span>
-           <span>洗洁剂：12桶</span>
-           <span>洗洁剂：12桶</span>
-         </van-collapse-item> -->
-       </van-collapse>
+       </van-collapse-item>
+     </van-collapse>
 
 
    </div>
@@ -58,22 +53,20 @@
 
             <div
        class='img-list'>
-       <van-image
-        v-for="(item,index) in data.userStoreReportImgUrls"
-        :key="index"
-        width="70"
-        height="70"
-        @click='preview(item)'
-        :src="item"/>
+              <van-image
+                v-for="(item,index) in data.userStoreReportImgUrls"
+                :key="index"
+                width="70"
+                height="70"
+                :src="item.slice(0,-1)"
+                @click='preview(item.slice(0,-1))'/>
 
        </div>
 
        <span class='title'>我们为您解决了以下问题</span>
 
 
-
-
-       <van-cell :title="item"  is-link   v-for="(item,index) in data.userStoreReportFaultDesc" :key="index"/>
+     <van-cell :key="index" :title="item.faultDesc" is-link v-for="(item,index) in data.userStoreReportFaultDesc"/>
 
 
 <!--       <div class='btn'>-->
@@ -141,47 +134,25 @@
   import { ImagePreview } from 'vant'
 export default {
   name: 'IndexPage',
-  data(){
-    return{
-      activeNames:[1]
+  data() {
+    return {
+      activeNames: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
     }
   },
-    async asyncData({ $axios,query}) {
-      // const ip = await $axios.get(`http://101.35.251.32:8081/base/getRandomBooks`)
-      // console.log(query)
-      // return { ip }
-      // console.log(api)
-      // return {api}
-       const {data} = await api()
-      return { data }
 
-    },
-   async mounted() {
-    // const {data} = await api()
-    // console.log(data)
-    //  this.getPdf("服务报告")
-     this.gethtml()
+  async asyncData({$axios, query}) {
+    const {data} = await $axios.post('http://192.168.0.238:7080/sale/api/store/reportForm', query)
+    const obj = data.data
+    return {data: obj}
+
   },
-  methods:{
+  async mounted() {
+
+  },
+  methods: {
     preview(item) {
-        ImagePreview([item]);
-    },
-    gethtml(){
-      const htmlStr = document.getElementById('container').innerHTML
-      this.$axios.post('http://localhost:8081/base/report',{htmlStr})
-      console.log(htmlStr)
-    },
-    /*1.用浏览器内部转换器实现html转码*/
-    htmlEncode(html){
-      //1.首先动态创建一个容器标签元素，如DIV
-      var temp = document.createElement ("div");
-      //2.然后将要转换的字符串设置为这个元素的innerText(ie支持)或者textContent(火狐，google支持)
-      (temp.textContent != undefined ) ? (temp.textContent = html) : (temp.innerText = html);
-      //3.最后返回这个元素的innerHTML，即得到经过HTML编码转换的字符串了
-      var output = temp.innerHTML;
-      temp = null;
-      return output;
-    },
+      ImagePreview([item]);
+    }
   }
 }
 </script>

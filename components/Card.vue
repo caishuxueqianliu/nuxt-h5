@@ -6,49 +6,18 @@
 
       {{item.productName ? '桶' : '次'}}</span> </div>
     </div>
-<!--       <div class="card-item">
-        <span class="card-item-title">洗洁剂</span>
-        <div> <span class="card-item-num">12</span><span class="card-item-title">桶</span> </div>
-      </div>
-      <div class="card-item">
-        <span class="card-item-title">洗洁剂</span>
-        <div> <span class="card-item-num">12</span><span class="card-item-title">桶</span> </div>
-      </div>
-      <div class="card-item">
-        <span class="card-item-title">洗洁剂</span>
-        <div> <span class="card-item-num">12</span><span class="card-item-title">桶</span> </div>
-      </div> -->
     </div>
 </template>
 
 <script>
     export default {
         name: "Card",
-        filters:{
-          productNameFilter(name){
-            const map = {
-              '201B洗碗机专用浓缩清洁剂': '清洁剂',
-                '302B洗碗机专用浓缩催干剂': '催干剂',
-                  '格莱亚专用洗碗机除垢剂': '除垢剂'
-            }
-            return map(name)
-          }
-
-        },
         props:{
           data:{
             type: Array
           }
         },
         methods:{
-                productNameFilter(name){
-            const map = {
-              '201B洗碗机专用浓缩清洁剂': '清洁剂',
-                '302B洗碗机专用浓缩催干剂': '催干剂',
-                  '格莱亚专用洗碗机除垢剂': '除垢剂'
-            }
-            return map(name)
-          }
 
         }
     }

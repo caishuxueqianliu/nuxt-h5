@@ -63,7 +63,7 @@
         type:Array
       }
     },
-    
+
     mounted () {
          this.xAxisData= this.workOrderTimeLatitudeTotalData.map(item=>{
         return item.timeAxis
@@ -84,8 +84,5 @@
   #myChartx{
     width: 100%;
     height: 312px;
-    /*margin-left: auto;*/
-    /*margin-right: auto;*/
-    /*float: left;*/
   }
 </style>

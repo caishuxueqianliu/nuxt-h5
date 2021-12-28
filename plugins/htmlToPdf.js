@@ -3,21 +3,38 @@ import JsPDF from 'jspdf';
 
 export default {
   install(Vue, options) {
-    Vue.prototype.getPdf = function (title, isShowPreviewFullTime) {
+    Vue.prototype.getImg = function (title, isShowPreviewFullTime) {
+      //1.toImg
       html2Canvas(document.querySelector('#container'), {
-        allowTaint: false,
-        useCORS: true,
-        x: 0,
-        y: 0
-      }).then(function (canvas) {
-          let pageWidth = 750
-          let pageHeight = canvas.height / (canvas.width / 750)
-          let pageData = canvas.toDataURL('image/jpeg', 1.0)
-          let PDF = new JsPDF('', 'pt', [pageWidth, pageHeight])
-          PDF.addImage(pageData, 'JPEG', 0, 0, pageWidth, pageHeight)
-          PDF.save(title + '.pdf')
-        }
-      )
-    }
+        scale: 2, //放大一倍，使图像清晰一点
+      }).then((canvas) => {
+        const exportImgEle = document.querySelector('#exportImg');
+        const exportImgLinkEle = document.querySelector('#exportImgLink');
+        exportImgEle.src = canvas.toDataURL('image/png');
+        exportImgLinkEle.href = canvas.toDataURL('image/png');
+        exportImgLinkEle.download = title
+        // console.log(exportImgLinkEle)
+        exportImgLinkEle.click();  // 执行 <a> 元素的下载
+      });
+
+
+    },
+      Vue.prototype.getPdf = function (title, isShowPreviewFullTime) {
+        // 2.toPdf
+        html2Canvas(document.querySelector('#container'), {
+          allowTaint: false,
+          useCORS: true,
+          x: 0,
+          y: 0
+        }).then(function (canvas) {
+            let pageWidth = 750
+            let pageHeight = canvas.height / (canvas.width / 750)
+            let pageData = canvas.toDataURL('image/jpeg', 1.0)
+            let PDF = new JsPDF('', 'pt', [pageWidth, pageHeight])
+            PDF.addImage(pageData, 'JPEG', 0, 0, pageWidth, pageHeight)
+            PDF.save(title + '.pdf')
+          }
+        )
+      }
   }
 }
