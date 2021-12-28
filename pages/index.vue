@@ -2,12 +2,12 @@
   <div>
     <img alt="" hidden id='exportImg' src="">
     <a hidden href="" id="exportImgLink"></a>
-    <van-button :disabled="pdfDisabled" @click='getPdfDownLoad("服务报告")' size="mini"
-                style="position: absolute;right: 70px;top: 10px" type="primary">
+    <van-button :disabled="pdfDisabled" @click='getPdfDownLoad("服务报告")' class="btn" size="mini"
+                style="z-index:999;position: fixed;top: 10px" type="primary">
       下载PDF
     </van-button>
     <van-button :disabled="imgDisabled" @click='getImgDownLoad("服务报告")' size="mini"
-                style="position: absolute;right: 10px;top: 10px" type="primary">
+                style="z-index:999;position: fixed;right: 10px;top: 10px" type="primary">
       下载图片
     </van-button>
     <div id="container">
@@ -20,7 +20,7 @@
         <img class="storeInfo-img" src="../static/test.png" alt=""/>
         <span class="storeInfo-name">{{data.userStore.name}}</span>
         <span class="storeInfo-address">{{data.userStore.address}}</span>
-     <span class="storeInfo-time">2021-06 至 2021-07</span>
+        <span class="storeInfo-time">{{startDate}} 至 {{endDate}}</span>
    </div>
 
 
@@ -53,17 +53,22 @@
      <Card :data='data.workOrderTotalData'/>
      <EchartsServer :workOrderTimeLatitudeTotalData='data.workOrderTimeLatitudeTotalData'/>
 
-            <div
+     <div
        class='img-list'>
-              <van-image
-                v-for="(item,index) in data.userStoreReportImgUrls"
-                :key="index"
-                width="70"
-                height="70"
-                :src="item.replace(';','')"
-                @click="preview(item.replace(';',''))"/>
+       <!--              <van-image-->
+       <!--                v-for="(item,index) in data.userStoreReportImgUrls"-->
+       <!--                :key="index"-->
+       <!--                width="70"-->
+       <!--                height="70"-->
+       <!--                :src="item.replace(';','')"-->
+       <!--                @click="preview(item.replace(';',''))"/>-->
+       <img
+         v-for="(item,index) in data.userStoreReportImgUrls"
+         :key="index"
+         :src="item.replace(';','')"
+         @click="preview(item.replace(';',''))"/>
 
-       </div>
+     </div>
 
        <span class='title'>我们为您解决了以下问题</span>
 
@@ -134,7 +139,7 @@
 
 <script>
   import {api} from './api.js'
-  import { ImagePreview } from 'vant'
+  import {ImagePreview, Toast} from 'vant'
 export default {
   name: 'IndexPage',
   data() {
@@ -149,8 +154,9 @@ export default {
     // const {data} = await $axios.post('http://192.168.0.238:7080/sale/api/store/reportForm', query)
     // const obj = data.data
     // return {data: obj}
+    const {startDate = '2021-01-01', endDate = '2021-12-31'} = query
     const {data} = await api()
-    return {data}
+    return {data, startDate, endDate}
 
   },
   async mounted() {
@@ -163,12 +169,20 @@ export default {
     getImgDownLoad(title) {
       this.imgDisabled = true
       this.getImg(title).then(() => {
+        Toast.success('下载图片成功');
         this.imgDisabled = false
+      }).catch(() => {
+        Toast.fail('下载图片失败');
+        this.pdfDisabled = false
       })
     },
     getPdfDownLoad(title) {
       this.pdfDisabled = true
       this.getPdf(title).then(() => {
+        Toast.success('下载PDF成功');
+        this.pdfDisabled = false
+      }).catch(() => {
+        Toast.fail('下载PDF失败');
         this.pdfDisabled = false
       })
     }
@@ -177,13 +191,18 @@ export default {
 </script>
 
 <style lang="less">
-  #container{
+  .btn {
+    right: 70px;
+  }
+
+  #container {
     display: flex;
     flex-flow: column nowrap;
     justify-content: center;
     align-items: center;
     padding: 45px 18px;
-    .head{
+
+    .head {
       display: flex;
       flex-flow: row nowrap;
       justify-content: center;
@@ -230,7 +249,8 @@ export default {
         opacity: 1;
         margin: 9px 0;
       }
-      .storeInfo-address{
+      .storeInfo-address {
+        text-align: center;
         font-size: 14px;
         font-family: Source Han Sans CN;
         font-weight: 400;
@@ -239,9 +259,9 @@ export default {
         opacity: 1;
 
       }
-      .storeInfo-time{
+      .storeInfo-time {
         text-align: center;
-        width: 130px;
+        width: 160px;
         height: 18px;
         background: #FA4901;
         opacity: 0.5;
@@ -279,15 +299,23 @@ export default {
         opacity: 1;
       }
       .img-list{
-        width:100%;
-        display:flex;
-        flex-flow:row wrap;
-        justify-content:flex-start;
-        align-items:center;
-        margin-bottom:24px;
-        .van-image{
-          margin-right:14px;
-          margin-bottom:10px;
+        width: 100%;
+        display: flex;
+        flex-flow: row wrap;
+        justify-content: flex-start;
+        align-items: center;
+        margin-bottom: 24px;
+
+        .van-image {
+          margin-right: 14px;
+          margin-bottom: 10px;
+        }
+
+        img {
+          margin-right: 14px;
+          margin-bottom: 10px;
+          width: 70px;
+          height: 70px;
         }
       }
       .title{

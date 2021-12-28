@@ -8,7 +8,9 @@ export default {
         //1.toImg
         try {
           html2Canvas(document.querySelector('#container'), {
-            scale: 2, //放大一倍，使图像清晰一点
+            useCORS: true,
+            // backgroundColor: null,
+            scale: 2
           }).then((canvas) => {
             const exportImgEle = document.querySelector('#exportImg');
             const exportImgLinkEle = document.querySelector('#exportImgLink');
