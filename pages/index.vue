@@ -169,7 +169,6 @@ export default {
     getImgDownLoad(title) {
       this.imgDisabled = true
       this.getImg(title).then(() => {
-        Toast.success('下载图片成功');
         this.imgDisabled = false
       }).catch(() => {
         Toast.fail('下载图片失败');
@@ -179,7 +178,6 @@ export default {
     getPdfDownLoad(title) {
       this.pdfDisabled = true
       this.getPdf(title).then(() => {
-        Toast.success('下载PDF成功');
         this.pdfDisabled = false
       }).catch(() => {
         Toast.fail('下载PDF失败');
